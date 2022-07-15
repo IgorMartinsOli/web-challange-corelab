@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { useEffect } from 'react'
+import api from '../../resources/api'
 
 import AdicionarUsuario from '../AdicionarUsuario/AdicionarUsuario'
 import Usuario from '../Usuario/Usuario'
@@ -8,10 +10,7 @@ class Usuarios extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      usuarios: [
-        { id: 1, nome: 'João', sobrenome: 'Silva', email: 'joao@mail.com' },
-        { id: 2, nome: 'Maria', sobrenome: 'Santos', email: 'maria@mail.com' }
-      ]
+      usuarios: []
     }
 
     this.adicionarUsuario = this.adicionarUsuario.bind(this)
@@ -20,6 +19,25 @@ class Usuarios extends Component {
   adicionarUsuario(usuario) {
     const usuarios = [...this.state.usuarios, usuario]
     this.setState({ usuarios: usuarios })
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:3001/vehicles')
+    .then(resposta => resposta.json())
+    .then(dados => {
+      console.log(dados)
+
+      const usuarios = dados.map(usuario => {
+        return {
+          id: usuario.id,
+          nome: usuario.name,
+          sobrenome: usuario.brand,
+          email: usuario.board
+        }
+      })
+      console.log(usuarios);
+      this.setState({ usuarios});
+    })
   }
 
   removerUsuario(usuario) {
